@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from models.user_buy  import User,Buy
 
-engine = create_engine('sqlite:///SQLAlchemy_telegram_db.db')
+#engine = create_engine('postgres://
 Base = declarative_base()
 Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind=engine)
@@ -31,10 +31,10 @@ CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 
 
-last = session.query(Buy).filter(Buy.buy_id).count()
-menu = session.query(Buy).filter(Buy.buy_id==last).one()
-t=menu.data_city.split('-')
-new=''.join(t[2]+'-'+t[1]+'-'+t[0]+'T'+ menu.data_time.replace('-',':')+':00')
+query = session.query(Buy)
+last = query.filter(bool(Buy.buy_id)).count()
+add = query.filter(Buy.buy_id == last).one()
+
 
 def get_credentials():
     """Gets valid user credentials from storage.
@@ -89,14 +89,14 @@ def main():
 
     event = {
         'summary': 'ресторан рога и копыта',
-        'location': menu.city,
-        'description': menu.menu,
+        'location': add.adress_city,
+        'description': add.menu,
         'start': {
-            'dateTime': new,
+            'dateTime': add.data_time_city,
             'timeZone': 'Europe/Kiev',
         },
         'end': {
-            'dateTime': new,
+            'dateTime': add.data_time_city,
             'timeZone': 'Europe/Kiev',
         },
 
@@ -104,5 +104,5 @@ def main():
     event = service.events().insert(calendarId='primary', body=event).execute()
 
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+main()
