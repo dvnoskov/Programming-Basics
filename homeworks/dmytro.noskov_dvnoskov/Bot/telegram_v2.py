@@ -258,7 +258,7 @@ def get_message():
 @server.route("/")
 def web_hook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://young-shelf-74466.herokuapp.com/' + config.token) #
+    bot.set_webhook(url='https:/' + config.token) #
     return "CONNECTED", 200
 
 
